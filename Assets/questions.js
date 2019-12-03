@@ -12,4 +12,23 @@ var questions = [
     ///etc.
     ];
 
-    
+$(document).ready(function() {
+
+    $("#start-btn").on("click", function() {
+
+        // remove instructions
+        $("h1").remove();
+        $(".lead").remove();
+
+        // add question
+        var addQuestion = $("<h3>");
+        addQuestion.text(questions[0].title);
+        $("#main-display").append(addQuestion);
+
+        // add buttons
+        
+
+
+       });
+
+});
