@@ -30,11 +30,18 @@ $(document).ready(function() {
         for (i = 0; i < questions[0].choices.length; i++){
             var rowID = "row_" + i;
             console.log(rowID);
-            
+
+            // Add row to vertically stack buttons
+            var addDiv = $("<div>");
+            addDiv.addClass("row");
+            addDiv.attr("id",rowID);
+            $(".buttons").append(addDiv);
+
+            // Add button
             var addBtn = $("<a>");
             addBtn.addClass("btn btn-primary mt-2");
-            addBtn.text(questions[0].choices[i]);
-            $(".buttons").append(addBtn);
+            addBtn.text((i+1) + ". " + questions[0].choices[i]);
+            $("#"+rowID).append(addBtn);
         };
 
 
