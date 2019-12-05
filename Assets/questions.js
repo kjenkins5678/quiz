@@ -8,13 +8,22 @@ var questions = [
         title: "The condition in an if / else statement is enclosed within ____.",
         choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
         answer: "parentheses"
+    },
+    {
+        title: "This is a test question",
+        choices: ["ab", "bc", "cd", "de"],
+        answer: "ab"
     }
     ///etc.
     ];
 
 $(document).ready(function() {
 
+
+    // First Question
+
     $("#start-btn").on("click", function() {
+        var numOfQuestions = questions.length;
 
         // remove instructions
         $("h1").remove();
@@ -45,60 +54,71 @@ $(document).ready(function() {
             $("#"+rowID).append(addBtn);
         };
 
-        $(".ansBtn").on("click", function() {
-            var userSelect = $(this).attr("data-anum");
-            var rightAnswer = questions[0].choices.indexOf(questions[0].answer);
+        numOfQuestions = numOfQuestions - 1
 
-            // Add new question
-            var newQuestion = $(".question").text(questions[1].title);
-            $("#main-display").append(newQuestion);
+        // Next Questions
 
-            // Remove old buttons
-            $(".row").remove();
-            $(".ansBtn").remove();
-
-            // Add new buttons
-            for (i = 0; i < questions[1].choices.length; i++){
-                var rowID = "row_" + i;
+            $(".ansBtn").on("click", function() {
+                var counter = 1;
+                var userSelect = $(this).attr("data-anum");
+                var rightAnswer = questions[counter - 1].choices.indexOf(questions[counter - 1].answer);
     
-                // Add row to vertically stack buttons
-                var addDiv = $("<div>");
-                addDiv.addClass("row");
-                addDiv.attr("id",rowID);
-                $(".buttons").append(addDiv);
+                console.log(numOfQuestions);
     
-                // Add button
-                var addBtn = $("<a>");
-                addBtn.addClass("btn btn-primary mt-2 ansBtn");
-                addBtn.text((i+1) + ". " + questions[1].choices[i]);
-                addBtn.attr("data-anum", i)
-                $("#"+rowID).append(addBtn);
-            };
-            
-            var checkDiv = $("<div>");
-            checkDiv.addClass("response");
-            $(".jumbotron").append(checkDiv);
-            
-            var addLine = $("<hr>");
-            addLine.addClass("my-4");
-            $(".response").append(addLine);
+                // Add new question
+                var newQuestion = $(".question").text(questions[counter].title);
+                $("#main-display").append(newQuestion);
+    
+                // Remove old buttons
+                $(".row").remove();
+                $(".ansBtn").remove();
+    
+                // Add new buttons
+                for (i = 0; i < questions[counter].choices.length; i++){
+                    var rowID = "row_" + i;
+        
+                    // Add row to vertically stack buttons
+                    var addDiv = $("<div>");
+                    addDiv.addClass("row");
+                    addDiv.attr("id",rowID);
+                    $(".buttons").append(addDiv);
+        
+                    // Add button
+                    var addBtn = $("<a>");
+                    addBtn.addClass("btn btn-primary mt-2 ansBtn");
+                    addBtn.text((i+1) + ". " + questions[counter].choices[i]);
+                    addBtn.attr("data-anum", i)
+                    $("#"+rowID).append(addBtn);
+                };
+                
+                var checkDiv = $("<div>");
+                checkDiv.addClass("response");
+                $(".jumbotron").append(checkDiv);
+                
+                var addLine = $("<hr>");
+                addLine.addClass("my-4");
+                $(".response").append(addLine);
+    
+                var responseText = $("<p>");
+                responseText.addClass("response-text");
+    
+                if (userSelect == rightAnswer) {
+                    responseText.text("Correct!");
+                    $(".response").append(responseText);
+                }
+                else{
+                    responseText.text("Incorrect!");
+                    $(".response").append(responseText);
+                }
 
-            var responseText = $("<p>");
-            responseText.addClass("response-text");
+                counter++
+                numOfQuestions = numOfQuestions - 1;
 
-            if (userSelect == rightAnswer) {
-                responseText.text("Correct!");
-                $(".response").append(responseText);
-            }
-            else{
-                responseText.text("Incorrect!");
-                $(".response").append(responseText);
-            }
+                console.log("the counter is equal to " + counter);
+                console.log("the number of questions is equal to " + numOfQuestions);
+    
+            });
 
-            // console.log(questions[0].answer);
-            // console.log(questions[0].choices.indexOf(questions[0].answer));
-            
-        });
     });
 
 });
