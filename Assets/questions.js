@@ -23,11 +23,15 @@ $(document).ready(function() {
     var counter = 0;
     var answerCorrect = "";
 
-    function NextQuestion(counter) {
+    function Reset() {
         $(".question").remove();
         $(".row").remove();
-        $("ansBtn").remove();
-        
+        $(".ansBtn").remove();
+    };
+
+    function NextQuestion(counter) {
+        Reset();
+
         var addQuestion = $("<h3>");
         addQuestion.addClass("question")
         addQuestion.text(questions[counter].title);
@@ -76,7 +80,15 @@ $(document).ready(function() {
         var userSelect = $(this).attr("data-anum");
         CheckAnswer(counter, userSelect);
         counter++;
-        NextQuestion(counter);
+        if (counter < questions.length) {
+            NextQuestion(counter);
+        } else {
+            console.log("no more questions");
+            Reset();
+            $("#main-display").append($("<h3>").text("All Done!"));
+            $("#main-display").append($("<p>").text("Your score is: "));
+            $("#main-display").append($("<p>").text("Enter Your Initials:"));
+        };
     });
 
 });
