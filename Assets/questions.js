@@ -17,11 +17,15 @@ var questions = [
     ///etc.
     ];
 
-var counter = 0;
-
 $(document).ready(function() {
     var counter = 0;
     var answerCorrect = "";
+    // 15 seconds per question
+    var timeLeft = 15 * questions.length;
+    var countdown = "";
+
+    console.log("countdown value at beginning: " + countdown);
+
 
     function Reset() {
         $(".question").remove();
@@ -68,7 +72,32 @@ $(document).ready(function() {
         console.log(answerCorrect);
     };
 
+    function AllDonePage(){
+        Reset();
+        $("#main-display").append($("<h3>").text("All Done!"));
+        $("#main-display").append($("<p>").text("Your score is: "));
+        $("#main-display").append($("<p>").text("Enter Your Initials:"));
+    };
+
+    function Timer(timeLeft, countdown) {
+        console.log("countdown value at beginning of timer function: " + countdown);
+        var timerInterval = setInterval(function() {
+            if (countdown){
+                timeLeft--;
+                $("#time").text(" Time: " + timeLeft);
+            }
+            
+            if(timeLeft === 0) {
+                clearInterval(timerInterval);
+                AllDonePage();
+            }
+        }, 1000);        
+      };
+
     $("#start-btn").on("click", function() {
+        countdown = true;
+        Timer(timeLeft, countdown);
+
         $("h1").remove();
         $(".lead").remove();
         $("#start-btn").remove();
@@ -83,11 +112,10 @@ $(document).ready(function() {
         if (counter < questions.length) {
             NextQuestion(counter);
         } else {
+            countdown = false;
+            console.log("countdown value at end of questions: " + countdown);
             console.log("no more questions");
-            Reset();
-            $("#main-display").append($("<h3>").text("All Done!"));
-            $("#main-display").append($("<p>").text("Your score is: "));
-            $("#main-display").append($("<p>").text("Enter Your Initials:"));
+            AllDonePage();
         };
     });
 
