@@ -17,119 +17,66 @@ var questions = [
     ///etc.
     ];
 
+var counter = 0;
+
 $(document).ready(function() {
     var counter = 0;
-    var answerCorrect = true;
+    var answerCorrect = "";
 
-    function GetQuestion(counter, answerCorrect) {
-        if (counter == 0){
-            $("h1").remove();
-            $(".lead").remove();
-            $("#start-btn").remove();
+    function NextQuestion(counter) {
+        $(".question").remove();
+        $(".row").remove();
+        $("ansBtn").remove();
+        
+        var addQuestion = $("<h3>");
+        addQuestion.addClass("question")
+        addQuestion.text(questions[counter].title);
+        $("#main-display").append(addQuestion);
 
-            var addQuestion = $("<h3>");
-            addQuestion.addClass("question")
-            addQuestion.text(questions[counter].title);
-            $("#main-display").append(addQuestion);
-    
-            // add buttons
-            for (i = 0; i < questions[counter].choices.length; i++){
-                var rowID = "row_" + i;
-    
-                // Add row to vertically stack buttons
-                var addDiv = $("<div>");
-                addDiv.addClass("row");
-                addDiv.attr("id",rowID);
-                $(".buttons").append(addDiv);
-    
-                // Add button
-                var addBtn = $("<a>");
-                addBtn.addClass("btn btn-primary mt-2 ansBtn");
-                addBtn.text((i+1) + ". " + questions[counter].choices[i]);
-                addBtn.attr("data-anum", i)
-                $("#"+rowID).append(addBtn);
-    
-            }
+        // add buttons
+        for (i = 0; i < questions[counter].choices.length; i++){
+            var rowID = "row_" + i;
 
+            // Add row to vertically stack buttons
+            var addDiv = $("<div>");
+            addDiv.addClass("row");
+            addDiv.attr("id",rowID);
+            $(".buttons").append(addDiv);
 
+            // Add button
+            var addBtn = $("<a>");
+            addBtn.addClass("btn btn-primary mt-2 ansBtn");
+            addBtn.text((i+1) + ". " + questions[counter].choices[i]);
+            addBtn.attr("data-anum", i)
+            $("#"+rowID).append(addBtn);
         }
-        else{
-            alert("counter is greater than 0");
-            $(".question").remove();
-            $("row").remove();
-            $(".ansBtn").remove();
+    };
 
-            var addQuestion = $("<h3>");
-            addQuestion.addClass("question")
-            addQuestion.text(questions[counter].title);
-            $("#main-display").append(addQuestion);
-    
-            // add buttons
-            for (i = 0; i < questions[counter].choices.length; i++){
-                var rowID = "row_" + i;
-    
-                // Add row to vertically stack buttons
-                var addDiv = $("<div>");
-                addDiv.addClass("row");
-                addDiv.attr("id",rowID);
-                $(".buttons").append(addDiv);
-    
-                // Add button
-                var addBtn = $("<a>");
-                addBtn.addClass("btn btn-primary mt-2 ansBtn");
-                addBtn.text((i+1) + ". " + questions[counter].choices[i]);
-                addBtn.attr("data-anum", i)
-                $("#"+rowID).append(addBtn);
-            }
+    function CheckAnswer(counter, userSelect){
+        var rightAnswer = questions[counter].choices.indexOf(questions[counter].answer);
 
-                //Add response div and text
-
-            var checkDiv = $("<div>");
-            checkDiv.addClass("response");
-            $(".jumbotron").append(checkDiv);
-            
-            var addLine = $("<hr>");
-            addLine.addClass("my-4");
-            $(".response").append(addLine);
-
-            var responseText = $("<p>");
-            responseText.addClass("response-text");
-
-            if (answerCorrect == true) {
-                responseText.text("Correct!");
-                $(".response").append(responseText);
-            }
-            else{
-                responseText.text("Incorrect!");
-                $(".response").append(responseText);
-            }
-
+        if (userSelect == rightAnswer){
+            answerCorrect = true;
         }
-
-        };
+        else {
+            answerCorrect = false;
+        }
+        console.log(answerCorrect);
+    };
 
     $("#start-btn").on("click", function() {
-        console.log("before function: " + counter + " " + answerCorrect);
+        $("h1").remove();
+        $(".lead").remove();
+        $("#start-btn").remove();
 
-        GetQuestion(counter, answerCorrect);
+        NextQuestion(counter);
+    });
 
-        $(".ansBtn").on("click", function(){
-            var userSelect = $(this).attr("data-anum");
-            var rightAnswer = questions[counter].choices.indexOf(questions[counter].answer);
-            console.log("user selection: " + userSelect + " rightAnswer: " + rightAnswer);
-            if (userSelect == rightAnswer){
-                answerCorrect = true;
-            }
-            else {
-                answerCorrect = false;
-            }
-
-            console.log("after function: " + counter + " " + answerCorrect);
-
-        });
-
+    $(".jumbotron").on("click", ".ansBtn", function(){
+        var userSelect = $(this).attr("data-anum");
+        CheckAnswer(counter, userSelect);
         counter++;
-
+        NextQuestion(counter);
     });
 
 });
