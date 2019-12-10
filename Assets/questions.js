@@ -23,6 +23,7 @@ $(document).ready(function() {
     // 15 seconds per question
     var timeLeft = 15 * questions.length;
     var countdown = "";
+    var timerInterval;
 
     console.log("countdown value at beginning: " + countdown);
 
@@ -80,17 +81,18 @@ $(document).ready(function() {
     };
 
     function Timer(timeLeft, countdown) {
+
         console.log("countdown value at beginning of timer function: " + countdown);
-        var timerInterval = setInterval(function() {
-            if (countdown){
-                timeLeft--;
-                $("#time").text(" Time: " + timeLeft);
-            }
+        timerInterval = setInterval(function() {
+        
+            timeLeft--;
+            $("#time").text(" Time: " + timeLeft);
             
             if(timeLeft === 0) {
                 clearInterval(timerInterval);
                 AllDonePage();
             }
+
         }, 1000);        
       };
 
@@ -113,6 +115,7 @@ $(document).ready(function() {
             NextQuestion(counter);
         } else {
             countdown = false;
+            clearInterval(timerInterval); //timerInterval may be local function
             console.log("countdown value at end of questions: " + countdown);
             console.log("no more questions");
             AllDonePage();
